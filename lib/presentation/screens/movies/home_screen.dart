@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:moviesapp/presentation/providers/movies/movies_providers.dart';
+import 'package:moviesapp/presentation/providers/providers.dart';
+import 'package:moviesapp/presentation/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = 'home-screen';
@@ -11,6 +12,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: _HomeView(),
+      bottomNavigationBar: CustomButtonNavigator(),
     );
   }
 }
@@ -31,15 +33,18 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final slideShowMovies = ref.watch(moviesSlideShowProvider);
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
-
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: nowPlayingMovies.length,
-      itemBuilder: (context, index) {
-        final movie = nowPlayingMovies[index];
-        return ListTile(title: Text(movie.title));
-      },
+    return Column(
+      children: [
+        const CustomAppBar(),
+        MoviesSlideShow(movies: slideShowMovies),
+        MovieHorizontalListView(
+          movies: nowPlayingMovies,
+          title: "In Theaters",
+          subTitle: "On Monday 20",
+        )
+      ],
     );
   }
 }
