@@ -49,7 +49,7 @@ class _MovieHorizontalListViewState extends State<MovieHorizontalListView> {
       height: 380,
       child: Column(
         children: [
-          if (widget.title != null && widget.subTitle != null)
+          if (widget.title != null || widget.subTitle != null)
             _Title(title: widget.title, subTitle: widget.subTitle),
           const SizedBox(height: 10),
           Expanded(
@@ -59,8 +59,10 @@ class _MovieHorizontalListViewState extends State<MovieHorizontalListView> {
               scrollDirection: Axis.horizontal,
               itemCount: widget.movies.length,
               itemBuilder: (context, index) {
-                return _Slide(
-                  movie: widget.movies[index],
+                return FadeInRight(
+                  child: _Slide(
+                    movie: widget.movies[index],
+                  ),
                 );
               },
             ),
