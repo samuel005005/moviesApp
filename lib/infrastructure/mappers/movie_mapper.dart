@@ -1,5 +1,5 @@
 import 'package:moviesapp/domain/entities/movie.dart';
-import 'package:moviesapp/infrastructure/models/moviedb/movie_moviedb.dart';
+import 'package:moviesapp/infrastructure/models/models.dart';
 
 class MovieMapper {
   static const String _posterNotFound =
@@ -24,5 +24,22 @@ class MovieMapper {
         video: movieDB.video,
         voteAverage: movieDB.voteAverage,
         voteCount: movieDB.voteCount,
+      );
+
+  static Movie movieDetailDbToEntity(MovieDetailDB movieDetailDB) => Movie(
+        adult: movieDetailDB.adult,
+        backdropPath: movieDetailDB.backdropPath,
+        genreIds: movieDetailDB.genres.map((e) => e.name.toString()).toList(),
+        id: movieDetailDB.id,
+        originalLanguage: movieDetailDB.originalLanguage,
+        originalTitle: movieDetailDB.originalTitle,
+        overview: movieDetailDB.overview,
+        popularity: movieDetailDB.popularity,
+        posterPath: movieDetailDB.posterPath,
+        releaseDate: movieDetailDB.releaseDate,
+        title: movieDetailDB.title,
+        video: movieDetailDB.video,
+        voteAverage: movieDetailDB.voteAverage,
+        voteCount: movieDetailDB.voteCount,
       );
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:moviesapp/presentation/providers/providers.dart';
 
-class MovieScreen extends StatelessWidget {
+class MovieScreen extends ConsumerStatefulWidget {
   static const name = 'movie-screen';
   final String movieId;
 
@@ -10,12 +12,23 @@ class MovieScreen extends StatelessWidget {
   });
 
   @override
+  MovieScreenState createState() => MovieScreenState();
+}
+
+class MovieScreenState extends ConsumerState<MovieScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(movieId),
+        title: Text(widget.movieId),
       ),
-      body: Text(movieId),
+      body: Text(widget.movieId),
     );
   }
 }
