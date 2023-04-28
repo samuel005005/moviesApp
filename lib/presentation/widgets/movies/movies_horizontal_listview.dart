@@ -1,8 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:moviesapp/config/Helpers/human_formats.dart';
 import 'package:moviesapp/domain/entities/movie.dart';
 
-class MovieHorizontalListView extends StatelessWidget {
+class MovieHorizontalListView extends StatefulWidget {
   final List<Movie> movies;
   final String? title;
   final String? subTitle;
@@ -17,22 +18,49 @@ class MovieHorizontalListView extends StatelessWidget {
   });
 
   @override
+  State<MovieHorizontalListView> createState() =>
+      _MovieHorizontalListViewState();
+}
+
+class _MovieHorizontalListViewState extends State<MovieHorizontalListView> {
+  final scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      if (widget.loadNextPage == null) return;
+
+      if (scrollController.position.pixels + 200 >=
+          scrollController.position.maxScrollExtent) {
+        widget.loadNextPage!();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 350,
+      height: 380,
       child: Column(
         children: [
-          if (title != null && subTitle != null)
-            _Title(title: title, subTitle: subTitle),
+          if (widget.title != null && widget.subTitle != null)
+            _Title(title: widget.title, subTitle: widget.subTitle),
           const SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
+              controller: scrollController,
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: movies.length,
+              itemCount: widget.movies.length,
               itemBuilder: (context, index) {
                 return _Slide(
-                  movie: movies[index],
+                  movie: widget.movies[index],
                 );
               },
             ),
@@ -49,6 +77,7 @@ class _Slide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
@@ -63,14 +92,52 @@ class _Slide extends StatelessWidget {
                 width: 150,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress != null) {
-                    return const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2));
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.black12,
+                        ),
+                        width: double.infinity,
+                        height: 220,
+                        child: const Center(
+                            child: CircularProgressIndicator(strokeWidth: 2)),
+                      ),
+                    );
                   }
                   return FadeIn(child: child);
                 },
               ),
             ),
-          )
+          ),
+          const SizedBox(height: 5),
+          SizedBox(
+            width: 150,
+            child: Text(
+              movie.title,
+              maxLines: 2,
+              style: textStyle.titleMedium,
+            ),
+          ),
+          SizedBox(
+            width: 150,
+            child: Row(
+              children: [
+                Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
+                const SizedBox(width: 3),
+                Text(
+                  '${movie.voteAverage}',
+                  style: textStyle.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.yellow.shade800),
+                ),
+                const Spacer(),
+                Text(HumanFormats.number(movie.popularity),
+                    style: textStyle.bodySmall),
+              ],
+            ),
+          ),
         ],
       ),
     );
