@@ -1,3 +1,3 @@
-export 'moviedb/movie_detail.dart';
-export 'moviedb/movies.dart';
-export 'moviedb/movies_response.dart';
+export 'moviedb/movie/movie_detail.dart';
+export 'moviedb/movie/movies.dart';
+export 'moviedb/movie/movies_response.dart';

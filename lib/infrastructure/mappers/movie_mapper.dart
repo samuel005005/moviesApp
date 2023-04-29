@@ -28,14 +28,18 @@ class MovieMapper {
 
   static Movie movieDetailDbToEntity(MovieDetailDB movieDetailDB) => Movie(
         adult: movieDetailDB.adult,
-        backdropPath: movieDetailDB.backdropPath,
+        backdropPath: movieDetailDB.backdropPath != ''
+            ? 'https://image.tmdb.org/t/p/w500/${movieDetailDB.backdropPath}'
+            : _posterNotFound,
         genreIds: movieDetailDB.genres.map((e) => e.name.toString()).toList(),
         id: movieDetailDB.id,
         originalLanguage: movieDetailDB.originalLanguage,
         originalTitle: movieDetailDB.originalTitle,
         overview: movieDetailDB.overview,
         popularity: movieDetailDB.popularity,
-        posterPath: movieDetailDB.posterPath,
+        posterPath: movieDetailDB.posterPath != ''
+            ? 'https://image.tmdb.org/t/p/w500/${movieDetailDB.posterPath}'
+            : 'no-poster',
         releaseDate: movieDetailDB.releaseDate,
         title: movieDetailDB.title,
         video: movieDetailDB.video,

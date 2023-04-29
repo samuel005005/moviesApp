@@ -6,7 +6,7 @@ import 'package:moviesapp/domain/entities/movie.dart';
 import 'package:moviesapp/infrastructure/mappers/movie_mapper.dart';
 import 'package:moviesapp/infrastructure/models/models.dart';
 
-class MovieDbDataSource extends MoviesDataSource {
+class MovieDataSource extends MoviesDataSource {
   final dio = Dio(
     BaseOptions(
       baseUrl: Enviroment.movieDbUrl,
