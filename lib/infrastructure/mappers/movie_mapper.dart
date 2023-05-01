@@ -18,7 +18,7 @@ class MovieMapper {
         popularity: movieDB.popularity,
         posterPath: movieDB.posterPath != ''
             ? 'https://image.tmdb.org/t/p/w500/${movieDB.posterPath}'
-            : 'no-poster',
+            : _posterNotFound,
         releaseDate: movieDB.releaseDate,
         title: movieDB.title,
         video: movieDB.video,
@@ -39,7 +39,7 @@ class MovieMapper {
         popularity: movieDetailDB.popularity,
         posterPath: movieDetailDB.posterPath != ''
             ? 'https://image.tmdb.org/t/p/w500/${movieDetailDB.posterPath}'
-            : 'no-poster',
+            : _posterNotFound,
         releaseDate: movieDetailDB.releaseDate,
         title: movieDetailDB.title,
         video: movieDetailDB.video,

@@ -34,6 +34,7 @@ final upCommingMoviesProvider =
     fetchMoreMovies: fetchMoreMovies,
   );
 });
+
 typedef MovieCallBack = Future<List<Movie>> Function({int page});
 
 class MoviesNotifier extends StateNotifier<List<Movie>> {
