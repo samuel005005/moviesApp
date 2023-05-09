@@ -35,9 +35,7 @@ class StorageDataSource extends LocalStorageDataSource {
       isar.writeTxnSync(() => isar.movies.deleteSync(favoriteMovie.isarId!));
       return;
     }
-
     isar.writeTxnSync(() => isar.movies.putSync(movie));
-    return;
   }
 
   @override

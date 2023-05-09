@@ -1,0 +1,4 @@
+storePassword=swagga
+keyPassword=swagga
+keyAlias=upload
+storeFile=./../../keystore.jks
