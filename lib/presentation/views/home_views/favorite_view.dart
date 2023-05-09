@@ -50,7 +50,7 @@ class FavoriteViewState extends ConsumerState<FavoriteView> {
                 style: TextStyle(fontSize: 20, color: colors.primary)),
             const Text(
               'There are not favorite movies',
-              style: TextStyle(fontSize: 20, color: Colors.black45),
+              style: TextStyle(fontSize: 20, color: Colors.white54),
             ),
             const SizedBox(height: 20),
             FilledButton.tonal(

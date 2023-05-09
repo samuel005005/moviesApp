@@ -1,5 +1,6 @@
 import 'package:moviesapp/domain/datasources/movies_datasource.dart';
 import 'package:moviesapp/domain/entities/movie.dart';
+import 'package:moviesapp/domain/entities/video.dart';
 import 'package:moviesapp/domain/repositories/movies_repository.dart';
 
 class MoviesRepositoryImplementation extends MoviesRepository {
@@ -35,5 +36,15 @@ class MoviesRepositoryImplementation extends MoviesRepository {
   @override
   Future<List<Movie>> searchMovies(String query) {
     return moviesDataSource.searchMovies(query);
+  }
+
+  @override
+  Future<List<Movie>> getSimilarMovies(int movieId) {
+    return moviesDataSource.getSimilarMovies(movieId);
+  }
+
+  @override
+  Future<List<Video>> getYoutubeVideosById(int movieId) {
+    return moviesDataSource.getYoutubeVideosById(movieId);
   }
 }

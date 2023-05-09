@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:moviesapp/domain/entities/movie.dart';
 import 'package:moviesapp/presentation/providers/providers.dart';
+import 'package:moviesapp/presentation/widgets/widgets.dart';
 
 class MovieScreen extends ConsumerStatefulWidget {
   static const name = 'movie-screen';
@@ -68,109 +69,12 @@ class _MovieDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  movie.posterPath,
-                  width: size.width * .3,
-                ),
-              ),
-              const SizedBox(width: 10),
-              SizedBox(
-                width: (size.width - 40) * .7,
-                child: Column(
-                  children: [
-                    Text(movie.title, style: textStyles.titleLarge),
-                    Text(movie.overview)
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Wrap(
-            children: [
-              ...movie.genreIds.map(
-                (gender) => Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: Chip(
-                    label: Text(gender),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        _ActorByMovie(movieId: movie.id.toString()),
-        const SizedBox(height: 100),
+        _TitleAndOverview(movie: movie, size: size, textStyles: textStyles),
+        _Genres(movie: movie),
+        ActorByMovie(movieId: movie.id.toString()),
+        VideosFromMovie(movieId: movie.id),
+        SimilarMovies(movieId: movie.id),
       ],
-    );
-  }
-}
-
-class _ActorByMovie extends ConsumerWidget {
-  final String movieId;
-  const _ActorByMovie({required this.movieId});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final actorByMovie = ref.watch(actorsProvider);
-
-    if (actorByMovie[movieId] == null) {
-      return const CircularProgressIndicator.adaptive(strokeWidth: 2);
-    }
-    final actors = actorByMovie[movieId]!;
-
-    return SizedBox(
-      height: 300,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: actors.length,
-        itemBuilder: (context, index) {
-          final actor = actors[index];
-          return Container(
-            padding: const EdgeInsets.all(8),
-            width: 135,
-            child: Column(
-              children: [
-                // Actor Photo
-                FadeInRight(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      actor.profilePath,
-                      height: 150,
-                      width: 135,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                //Name
-                const SizedBox(height: 5),
-                Text(actor.name, maxLines: 2),
-                Text(
-                  actor.character ?? '',
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
     );
   }
 }
@@ -289,6 +193,71 @@ class _CustomGradient extends StatelessWidget {
             colors: colors,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _TitleAndOverview extends StatelessWidget {
+  final Movie movie;
+  final Size size;
+  final TextTheme textStyles;
+
+  const _TitleAndOverview(
+      {required this.movie, required this.size, required this.textStyles});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(
+              movie.posterPath,
+              width: size.width * .3,
+            ),
+          ),
+          const SizedBox(width: 10),
+          SizedBox(
+            width: (size.width - 40) * .7,
+            child: Column(
+              children: [
+                Text(movie.title, style: textStyles.titleLarge),
+                Text(movie.overview)
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _Genres extends StatelessWidget {
+  final Movie movie;
+  const _Genres({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Wrap(
+        children: [
+          ...movie.genreIds.map(
+            (gender) => Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: Chip(
+                label: Text(gender),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
