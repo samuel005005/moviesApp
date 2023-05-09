@@ -8,3 +8,4 @@ export 'movies/movie_poster_link.dart';
 export 'actors/actors_by_movie.dart';
 export 'videos/videos_from_movie.dart';
 export 'movies/similar_movies.dart';
+export 'movies/movie_rating.dart';

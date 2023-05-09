@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:moviesapp/config/Helpers/human_formats.dart';
 import 'package:moviesapp/domain/entities/movie.dart';
 import 'package:moviesapp/presentation/providers/providers.dart';
 import 'package:moviesapp/presentation/widgets/widgets.dart';
@@ -86,7 +87,7 @@ class _CustomSliverAppBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isFavoriteFutute = ref.watch(isFavoriteProvider(movie.id));
-
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final size = MediaQuery.of(context).size;
     return SliverAppBar(
       backgroundColor: Colors.black,
@@ -114,12 +115,16 @@ class _CustomSliverAppBar extends ConsumerWidget {
       ],
       // shadowColor: Colors.red,
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        // title: Text(
-        //   movie.title,
-        //   style: const TextStyle(fontSize: 20),
-        //   textAlign: TextAlign.start,
-        // ),
+        titlePadding: const EdgeInsets.only(bottom: 0),
+        title: _CustomGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: const [0.7, 1.0],
+          colors: [
+            Colors.transparent,
+            scaffoldBackgroundColor,
+          ],
+        ),
         background: Stack(
           children: [
             SizedBox.expand(
@@ -135,32 +140,26 @@ class _CustomSliverAppBar extends ConsumerWidget {
                 },
               ),
             ),
+            //* Favorite Gradient Background
             const _CustomGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              stops: [.0, 0.2],
+              stops: [0.0, 0.2],
               colors: [
-                Colors.black87,
+                Colors.black54,
                 Colors.transparent,
               ],
             ),
-            const _CustomGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [.7, 1.0],
-              colors: [
-                Colors.transparent,
-                Colors.black87,
-              ],
-            ),
+
+            //* Back arrow background
             const _CustomGradient(
               begin: Alignment.topLeft,
-              stops: [0.0, 0.4],
+              stops: [0.0, 0.3],
               colors: [
                 Colors.black87,
                 Colors.transparent,
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -209,7 +208,7 @@ class _TitleAndOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -224,9 +223,21 @@ class _TitleAndOverview extends StatelessWidget {
           SizedBox(
             width: (size.width - 40) * .7,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(movie.title, style: textStyles.titleLarge),
-                Text(movie.overview)
+                Text(movie.overview),
+                const SizedBox(height: 10),
+                MovieRating(voteAverage: movie.voteAverage),
+                Row(
+                  children: [
+                    const Text('Estreno:',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 5),
+                    Text(HumanFormats.shortDate(movie.releaseDate))
+                  ],
+                )
               ],
             ),
           )
